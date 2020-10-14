@@ -45,7 +45,7 @@ const es = require('event-stream');
 
 // Copy images, fonts
 gulp.task("CopyAssets", function () {
-    return gulp.src(["assets/images/**/*", "styles/lib/**/*", "assets/fonts/**/*", "scripts/**/*.js", "scripts/**/*.json"], {
+    return gulp.src(["assets/images/**/*", "styles/lib/**/*", "assets/fonts/**/*", "scripts/**/*.js", "scripts/**/*.json","data/*"], {
       cwd: conf.paths.src
     }).pipe(copy(conf.paths.build));
   });

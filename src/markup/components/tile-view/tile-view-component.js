@@ -81,14 +81,14 @@ $(document).ready(function () {
    
     
     
-    //   $.ajax({
-    //     type: "GET",
-    //     dataType: "json",
-    //     url: "../../../data/items.json",
-    //     success: function (data) {
-    //       console.log(data);
-    //     },
-    //   });
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "../../../data/items.json",
+        success: function (data) {
+          console.log(data);
+        },
+      });
     
      // $.getJSON("/src/assets/items.json", function(res) {
       //     console.log(res.items.name)
