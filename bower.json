@@ -1,0 +1,25 @@
+{
+    "name": "Anthem POC",
+    "version": "1.0.0",
+    "authors": [
+        "TSI"
+    ],
+    "license": "",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "build",
+        "test",
+        "tests"
+    ],
+    "dependencies":
+    {
+        "bootstrap": "^4.0.0",
+        "jquery-ui": "^1.2.1",
+        "jquery": "^3.3.1",
+        "slick-carousel": "^1.8.0",
+        "popper.js": "^1.14.4",
+        "sticky-kit": "^1.1.2",
+        "bootstrap-datepicker": "^1.8.0"
+    }
+}

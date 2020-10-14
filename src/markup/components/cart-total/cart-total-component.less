@@ -1,0 +1,35 @@
+.total-amount-container {
+    border: 1px solid #000;
+    margin-top: 25px;
+    .total-header-text {
+        font-weight: bold;
+        padding: 0 10px;
+    }
+    .total-item-amount-section {
+        display: flex;
+        padding: 0 10px;
+        justify-content: space-between;
+    }
+    .order-total {
+        background: #D2DEE2;
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 10px;
+        .order-total-text {
+            max-width: 92px;
+            width: 25%;
+            font-weight: bold;
+        }
+        .item-sub-total {
+            font-weight: bold;
+        }
+    }
+    .total-items,.total-item-disc,.total-item-price {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .total-item-price {
+        text-align: right;
+    }
+}
