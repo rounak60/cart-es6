@@ -17,21 +17,37 @@ function fetchItemData() {
 }
 
 function addListner(data) {
-  data.map((btn,index) => {
-
+  let cartDetails = data.map((cartBtn,index) => {
     document.querySelector(`#btn-${index}`).addEventListener("click", function (e) {
 
       const grossTotal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
       const discTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
       const itemTotal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
-      const newDiscount = btn.price.display - btn.price.actual;
+      const newDiscount = cartBtn.price.display - cartBtn.price.actual;
 
-      document.getElementsByClassName("disc-total")[0].innerText = discTotal + newDiscount;
-      document.getElementsByClassName("gross-total")[0].innerText = grossTotal + btn.price.actual;
-      document.getElementsByClassName("item-total")[0].innerText = itemTotal + btn.price.display;
+      document.getElementsByClassName("disc-total")[0].innerText =  (discTotal + newDiscount);
+      document.getElementsByClassName("gross-total")[0].innerText =  (grossTotal + cartBtn.price.actual);
+      document.getElementsByClassName("item-total")[0].innerText =  (itemTotal + cartBtn.price.display);
 
+      return `<tr> 
+                <th> 
+                  <div>
+                    <div>${cartBtn.image}</div>
+                    <div>${cartBtn.name}</div>
+                  </div> 
+                </th> 
+                <th>
+                  <input type="button" value="-" class="sub-quant" >
+                  <input type="text" size="10" value="1" class="totalCount" disabled>
+                  <input type="button" value="+" class="add-quant" >
+                </th> 
+                <th>$${cartBtn.price.display}</th> 
+              </tr>
+              `
     });
-  });
+  }).join(' ');
+  document.querySelector(".added-items-list").innerHTML = cartDetails;
+
 }
 
 function addQty() {
