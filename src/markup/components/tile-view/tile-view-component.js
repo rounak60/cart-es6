@@ -1,44 +1,44 @@
+
 function fetchItemData() {
   fetch("../../../data/items.json")
-  .then(res => console.log(res));
+    .then((res) => {
+      if (!res.ok) {
+        throw Error("ERROR IN API");
+      }
+      return res.json();
+    })
+    .then((itemData) => {
+      renderData(itemData.items);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
+function renderData(renderItemData) {
+  var itemCountId = 0;
+  var itemList = renderItemData.map((data,index) => {
+    return `<div class="item-details-container" data-id = "itemId-` + itemCountId + `">
+                <div class="item-image-section">
+                    <div class="item-discount"> + ${data.discount} + % off</div>
+                    <img src=" ${data.image}  ">
+                </div>
+                <div class="item-details-section">
+                    <div class="item-name"> ${data.name}</div>
+                    <div class="item-details">
+                        <div class="item-price">
+                            <span class="item-display-price" data-display="${data.price.display}">$ ${data.price.display}</span>
+                            <span class="item-actual-price" data-actual="${data.price.actual}">$ ${data.price.actual}</span>
+                        </div>
+                        <button class="add-to-cart-btn"> Add to Cart </button>
+                    </div>
+                </div>
+            </div>
+        `}).join(' ');
+      itemCountId++;
+
+  document.querySelector(".items-tile-section").innerHTML = itemList;
+}
+
+// window.onload
 fetchItemData();
-
-
-
-// window.load(function() {
-
-//   $.ajax({
-//     type: "GET",
-//     url: "../../../data/items.json",
-//     success: function (res) {   
-//       console.log(res)
-//     }
-//   });
-
-// })
-
-  
-
-// fetch('../../../data/items.json')
-//   .then(res => res.json())
-//   .then(data =>{
-//     console.log(data)
-//     if(data.length > 0) {
-//       var test = '';
-
-//       //-- start for loop
-
-//       data.forEach((itemData) => {
-         
-//         test +="<div>"
-//         test +="<div>"+ itemData.items.name +"</div></div>";
-//       });
-
-//       //-- end for loop 
-//       console.log("data test",test);
-//       document.getElementById("testData").innerHTML = test;
-//     }
-
-//   });
