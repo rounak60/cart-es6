@@ -1,0 +1,29 @@
+.total-amount-container {
+    margin-top: 20px;
+    border: 1px solid;
+    padding: 5px 10px;
+    .total-header-text {
+        font-weight: bold;
+    }
+    .total-item-amount-section {
+        .gross-total {
+            width: 100%;
+            tbody {
+                tr {
+                    td.total-text {
+                        width: 50%;
+                    }
+                    .item-total, .disc-total, .type-disc-total, .gross-total {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .total-amount-container { 
+        width: 100%;
+    }
+}
