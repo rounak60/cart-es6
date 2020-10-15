@@ -9,10 +9,41 @@ function fetchItemData() {
     })
     .then((itemData) => {
       renderData(itemData.items);
+      addListner(itemData.items);
     })
     .catch((error) => {
       console.log(error);
     });
+}
+
+function addListner(data) {
+  data.map((btn,index) => {
+
+    document.querySelector(`#btn-${index}`).addEventListener("click", function (e) {
+
+      const grossTotal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
+      const discTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
+      const itemTotal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
+      const newDiscount = btn.price.display - btn.price.actual;
+
+      document.getElementsByClassName("disc-total")[0].innerText = discTotal + newDiscount;
+      document.getElementsByClassName("gross-total")[0].innerText = grossTotal + btn.price.actual;
+      document.getElementsByClassName("item-total")[0].innerText = itemTotal + btn.price.display;
+
+    });
+  });
+}
+
+function addQty() {
+
+}
+
+function removeQty() {
+
+}
+
+function removeItem() {
+
 }
 
 // passing data into renderData() and rendering it into DOM
@@ -20,7 +51,7 @@ function renderData(renderItemData) {
   let itemList = renderItemData.map((data,index) => {
     return `<div class="item-details-container" data-id = "itemId-${index}">
                 <div class="item-image-section">
-                    <div class="item-discount"> ${data.discount} % off</div>
+                    <div class="item-discount"> ${data.discount}% off</div>
                     <img src="${data.image}">
                 </div>
                 <div class="item-details-section">
@@ -45,5 +76,7 @@ window.addEventListener('load', (event) => {
   fetchItemData();
 });
 
-// window.addEventListener('click', )
-document.getElementById("")
+document.addEventListener("DOMContentLoaded", function(){
+
+  
+});
