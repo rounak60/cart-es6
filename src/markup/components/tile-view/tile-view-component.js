@@ -1,4 +1,3 @@
-
 // function which fetches JSON data
 function fetchItemData() {
   fetch("../../../data/items.json")
@@ -10,7 +9,6 @@ function fetchItemData() {
     })
     .then((itemData) => {
       renderData(itemData.items);
-      addListener(itemData.items)
     })
     .catch((error) => {
       console.log(error);
@@ -20,10 +18,10 @@ function fetchItemData() {
 // passing data into renderData() and rendering it into DOM
 function renderData(renderItemData) {
   let itemList = renderItemData.map((data,index) => {
-    return `<div class="item-details-container" data-id = "itemId-${index}">
+    return `<div class="item-details-container" id="${index}" data-id = "itemId-${index}">
                 <div class="item-image-section">
                     <div class="item-discount"> ${data.discount}% off</div>
-                    <img src="${data.image}">
+                    <img class="item-image" src="${data.image}">
                 </div>
                 <div class="item-details-section">
                     <div class="item-name"> ${data.name}</div>
@@ -32,7 +30,7 @@ function renderData(renderItemData) {
                             <span class="item-display-price" data-display="${data.price.display}">$${data.price.display}</span>
                             <span class="item-actual-price" data-actual="${data.price.actual}">$${data.price.actual}</span>
                         </div>
-                        <button class="add-to-cart-btn" id="btn-${index}"> Add to Cart </button>
+                        <button class="add-to-cart-btn" id="btn-${index}" onClick="addToCart(this)"> Add to Cart </button>
                     </div>
                 </div>
             </div>
@@ -42,50 +40,49 @@ function renderData(renderItemData) {
   document.querySelector(".items-tile-section").innerHTML = itemList;
 }
 
-function addListener(data) {
-  addToCartListner(data);
-}
+function addToCart(itemData) {
+  const id = itemData.getAttribute('id').split('-')[1];
+  const selectedItem = itemData.parentElement.parentElement;
+  const itemName = selectedItem.getElementsByClassName('item-name')[0].innerText;
+  const imageUrl = selectedItem.parentElement.getElementsByClassName('item-image')[0].getAttribute('src');
+  const itemDisplayPrice = parseInt(selectedItem.getElementsByClassName('item-display-price')[0].getAttribute('data-display'));
+  const itemActualPrice = parseInt(selectedItem.getElementsByClassName('item-actual-price')[0].getAttribute('data-actual'));
+  const itemTotal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
+  const discTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
+  const grossTotal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
+  const newDiscount = itemDisplayPrice - itemActualPrice;
 
-function addToCartListner(data) {
-   data.map((cartBtn,index) => {
-    let htmlTable = "";
+  //Updating Total, Discounted Price, Gross Total
+  document.getElementsByClassName("item-total")[0].innerText =  (itemTotal + itemDisplayPrice);
+  document.getElementsByClassName("disc-total")[0].innerText =  (discTotal + newDiscount);
+  document.getElementsByClassName("gross-total")[0].innerText =  (grossTotal + itemActualPrice);
 
-    document.querySelector(`#btn-${index}`).addEventListener("click", function (e) {
+  // Function for Cart Button properties change on click.
+  cartBtnProp(id, itemName); 
 
-      // getting all the values on the item tile for calculation
-      const itemTotal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
-      const discTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
-      const grossTotal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
-      const newDiscount = cartBtn.price.display - cartBtn.price.actual;
+  // Creating HTML for Item Added to Cart
+  const htmlTable =  `<tr class="cart-item-block" id="${id}" data-display="${itemDisplayPrice}" data-actual="${itemActualPrice}" data-index="${id}"> 
+  <td> 
+    <div class="item-list-details">
+      <div class="item--details">
+        <div>
+          <img class="item-list-image" src="${imageUrl}">
+        </div>
+        <div class="item-list-name">${itemName}</div>
+      </div>
+      <div class="item-list-remove" onClick="removeItem(this)">x</div>
+    </div> 
+  </td> 
+  <td class="list-item-qty">
+    <input type="button" value="-" class="sub-quant" onClick="changeQuantity(this,'remove')" disabled>
+    <input type="text" size="10" value="1" class="totalCount" disabled>
+    <input type="button" value="+" class="add-quant" onClick="changeQuantity(this,'add')">
+  </td> 
+  <td class="list-item-price">${itemDisplayPrice}</td> 
+</tr>`;
 
-      document.getElementsByClassName("item-total")[0].innerText =  (itemTotal + cartBtn.price.display);
-      document.getElementsByClassName("disc-total")[0].innerText =  (discTotal + newDiscount);
-      document.getElementsByClassName("gross-total")[0].innerText =  (grossTotal + cartBtn.price.actual);
-
-      cartBtnProp(index, cartBtn.name); // Function for Cart Button properties change on click.
-
-      htmlTable =  `<tr class="cart-item-block" data-display="${cartBtn.price.display}" data-actual="${cartBtn.price.actual}" data-index="${index}"> 
-                      <td> 
-                        <div class="item-list-details">
-                          <div class="item--details">
-                            <div>
-                              <img class="item-list-image" src="${cartBtn.image}">
-                            </div>
-                            <div class="item-list-name">${cartBtn.name}</div>
-                          </div>
-                          <div class="item-list-remove" onClick="removeItem(this)">x</div>
-                        </div> 
-                      </td> 
-                      <td class="list-item-qty">
-                        <input type="button" value="-" class="sub-quant" onClick="changeQuantity(this,'remove')" disabled>
-                        <input type="text" size="10" value="1" class="totalCount" disabled>
-                        <input type="button" value="+" class="add-quant" onClick="changeQuantity(this,'add')">
-                      </td> 
-                      <td class="list-item-price">${cartBtn.price.display}</td> 
-                    </tr>`
-      document.querySelector(".added-items-list").innerHTML += htmlTable;
-    });
-  });
+//Updating DOM with new HTML for Cart
+document.querySelector(".added-items-list").innerHTML += htmlTable;
 }
 
 function cartItemLength() {
@@ -140,13 +137,11 @@ function removeItem(tr) {
   const displayVal = parseInt(selectedRow.getAttribute("data-display"));
   const actualVal = parseInt(selectedRow.getAttribute("data-actual"));
   const dataIndex = parseInt(selectedRow.getAttribute("data-index"));
-  console.log(selectedRow.getElementsByClassName("totalCount")[0].value)
   const removedQty = parseInt(selectedRow.getElementsByClassName("totalCount")[0].value);
   const orderTotalVal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
   const itemTotalVal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
   const discountTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
   const getItemContainer = document.getElementsByClassName("item-details-container")[dataIndex];
-  console.log(itemTotalVal,displayVal,removedQty)
   document.getElementsByClassName("item-total")[0].innerText = itemTotalVal - (displayVal * removedQty);
   document.getElementsByClassName("disc-total")[0].innerText = discountTotal - ((displayVal - actualVal) * removedQty);
   document.getElementsByClassName("gross-total")[0].innerText = orderTotalVal - (actualVal * removedQty);
