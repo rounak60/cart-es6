@@ -63,7 +63,7 @@ function addToCartListner(data) {
 
       cartBtnProp(index, cartBtn.name); // Function for Cart Button properties change on click.
 
-      htmlTable =  `<tr data-display="${cartBtn.price.display}" data-actual="${cartBtn.price.actual}" data-index="${index}"> 
+      htmlTable =  `<tr class="cart-item-block" data-display="${cartBtn.price.display}" data-actual="${cartBtn.price.actual}" data-index="${index}"> 
                       <td> 
                         <div class="item-list-details">
                           <div class="item--details">
@@ -87,8 +87,13 @@ function addToCartListner(data) {
   });
 }
 
+function cartItemLength() {
+  const cartItemCount = document.getElementsByClassName("cart-item-block").length;
+  document.getElementsByClassName("total-item-number").innerHTML = "Items" + "(" + cartItemCount + ")"
+}
+
 function cartBtnProp(index, name) {
-  document.querySelector(`#btn-${index}`).setAttribute('disabled','true');
+  document.querySelector(`#btn-${index}`).setAttribute('disabled',true);
   document.querySelector(`#btn-${index}`).className += " " + "add-to-cart-btn--disabled";
   document.querySelector(`#btn-${index}`).innerHTML = "Added to Cart";
   document.querySelector(".header-toast-msg").style.display = "block";
@@ -100,9 +105,8 @@ function cartBtnProp(index, name) {
 
 function cartBtnProRemoveItem(index) {
   document.querySelector(`#btn-${index}`).removeAttribute('disabled');
-  document.querySelector(`#btn-${index}`).className -= " " + "add-to-cart-btn--disabled";
+  document.querySelector(`#btn-${index}`).classList.remove("add-to-cart-btn--disabled") ;
   document.querySelector(`#btn-${index}`).innerHTML = "Add to Cart";
-  
 }
 
 function changeQuantity(tr, type) {
@@ -110,8 +114,7 @@ function changeQuantity(tr, type) {
   const displayVal = parseInt(selectedRow.getAttribute("data-display"));
   const actualVal = parseInt(selectedRow.getAttribute("data-actual"));
   const indexVal = parseInt(selectedRow.rowIndex) - 1;
-  console.log(selectedRow.parentElement.rowIndex,selectedRow.rowIndex)
-  const quantity = parseInt(document.getElementsByClassName("totalCount")[0].value);
+  const quantity = parseInt(document.getElementsByClassName("totalCount")[indexVal].value);
   const orderTotalVal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
   const itemTotalVal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
   const discountTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
@@ -122,13 +125,10 @@ function changeQuantity(tr, type) {
   document.getElementsByClassName("disc-total")[0].innerText = type === "add" ? (discountTotal + (displayVal - actualVal)) : (discountTotal - (displayVal - actualVal));
   document.getElementsByClassName("totalCount")[indexVal].value =  updatedQuantity;
   
-
-  // console.log(updatedQuantity)
-  console.log(document.getElementsByClassName("sub-quant"))
-  if(updatedQuantity == 1) {
-    document.getElementsByClassName("sub-quant")[indexVal].removeAttribute('disabled');
-  }else {
+  if(updatedQuantity === 1) {
     document.getElementsByClassName("sub-quant")[indexVal].setAttribute('disabled',true);
+  }else {
+    document.getElementsByClassName("sub-quant")[indexVal].removeAttribute('disabled');
   }
 }
 
@@ -136,27 +136,24 @@ function removeItem(tr) {
   let selectedRow = tr.parentElement.parentElement.parentElement;
   let displayVal = selectedRow.getAttribute("data-display");
   let actualVal = selectedRow.getAttribute("data-actual");
+  let dataIndex = selectedRow.getAttribute("data-index");
   const removedQty = parseInt(document.getElementsByClassName("totalCount")[0].value);
   let orderTotalVal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
   let itemTotalVal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
   let discountTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
+  const getItemContainer = document.getElementsByClassName("item-details-container")[dataIndex];
 
   document.getElementsByClassName("gross-total")[0].innerText = orderTotalVal - (actualVal * removedQty);
   document.getElementsByClassName("item-total")[0].innerText = itemTotalVal - (displayVal * removedQty);
   document.getElementsByClassName("disc-total")[0].innerText = discountTotal - ((displayVal - actualVal) * removedQty);
   document.getElementById("cartTable").deleteRow(selectedRow.rowIndex);
 
+  if(getItemContainer) {
+    cartBtnProRemoveItem(dataIndex);
+  }
 }
-
-
 
 // Calling the function which fetches JSON data on window load
 window.addEventListener('load', (event) => {
   fetchItemData();
-
-});
-
-document.addEventListener("DOMContentLoaded", function(){
-
-  
 });

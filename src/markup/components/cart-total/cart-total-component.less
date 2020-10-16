@@ -1,28 +1,53 @@
 .total-amount-container {
     margin-top: 20px;
     border: 1px solid;
-    padding: 5px 10px;
+    // padding: 5px 10px;
     .total-header-text {
         font-weight: bold;
+        padding: 5px 10px 0;
     }
     .total-item-amount-section {
         .gross-total-table {
             width: 100%;
+            padding: 5px 10px 0;
             tbody {
                 tr {
                     td.total-text {
                         width: 50%;
+                        padding-left: 10px;
+
                     }
                     .item-total, .disc-total, .type-disc-total, .gross-total {
                         text-align: right;
+                        padding-right: 10px;
+
                     }
-                    .item-total::before, .disc-total::before, .type-disc-total::before, .gross-total::before {
+                    .item-total::before, .disc-total::before, .type-disc-total::before {
                         content: "\0024";
                     }
                     .disc-total::before, .type-disc-total::before {
                         content: "\2212""\0024";
                     }
 
+                }
+            }
+        }
+        .order-total-table {
+            width: 100%;
+            background: #D2DEE2;
+            tbody {
+                tr {
+                    .total-text {
+                        width: 50%;
+                        padding-left: 10px;
+                    }
+                    .gross-total {
+                        text-align: right;
+                        padding-right: 10px;
+                    }
+                    .gross-total::before {
+                        content: "\0024";
+                    }
                 }
             }
         }
