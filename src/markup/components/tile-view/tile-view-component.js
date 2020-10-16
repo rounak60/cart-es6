@@ -1,3 +1,4 @@
+
 // function which fetches JSON data
 function fetchItemData() {
   fetch("../../../data/items.json")
@@ -80,7 +81,7 @@ function addToCartListner(data) {
                         <input type="text" size="10" value="1" class="totalCount" disabled>
                         <input type="button" value="+" class="add-quant" onClick="changeQuantity(this,'add')">
                       </td> 
-                      <td class="list-item-price">$${cartBtn.price.display}</td> 
+                      <td class="list-item-price">${cartBtn.price.display}</td> 
                     </tr>`
       document.querySelector(".added-items-list").innerHTML += htmlTable;
     });
@@ -118,8 +119,10 @@ function changeQuantity(tr, type) {
   const orderTotalVal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
   const itemTotalVal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
   const discountTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
+  const singleItemTotal = parseInt(document.getElementsByClassName("list-item-price")[indexVal].innerText);
   const updatedQuantity = type === "add" ? (quantity + 1) : (quantity - 1);
 
+  document.getElementsByClassName("list-item-price")[indexVal].innerText = type === "add" ? (displayVal*updatedQuantity) : (singleItemTotal - displayVal);
   document.getElementsByClassName("gross-total")[0].innerText = type === "add" ? (orderTotalVal + actualVal): (orderTotalVal - actualVal);
   document.getElementsByClassName("item-total")[0].innerText = type === "add" ? (itemTotalVal + displayVal): (itemTotalVal - displayVal);
   document.getElementsByClassName("disc-total")[0].innerText = type === "add" ? (discountTotal + (displayVal - actualVal)) : (discountTotal - (displayVal - actualVal));
@@ -133,19 +136,20 @@ function changeQuantity(tr, type) {
 }
 
 function removeItem(tr) {
-  let selectedRow = tr.parentElement.parentElement.parentElement;
-  let displayVal = selectedRow.getAttribute("data-display");
-  let actualVal = selectedRow.getAttribute("data-actual");
-  let dataIndex = selectedRow.getAttribute("data-index");
-  const removedQty = parseInt(document.getElementsByClassName("totalCount")[0].value);
-  let orderTotalVal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
-  let itemTotalVal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
-  let discountTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
+  const selectedRow = tr.parentElement.parentElement.parentElement;
+  const displayVal = parseInt(selectedRow.getAttribute("data-display"));
+  const actualVal = parseInt(selectedRow.getAttribute("data-actual"));
+  const dataIndex = parseInt(selectedRow.getAttribute("data-index"));
+  console.log(selectedRow.getElementsByClassName("totalCount")[0].value)
+  const removedQty = parseInt(selectedRow.getElementsByClassName("totalCount")[0].value);
+  const orderTotalVal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
+  const itemTotalVal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
+  const discountTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
   const getItemContainer = document.getElementsByClassName("item-details-container")[dataIndex];
-
-  document.getElementsByClassName("gross-total")[0].innerText = orderTotalVal - (actualVal * removedQty);
+  console.log(itemTotalVal,displayVal,removedQty)
   document.getElementsByClassName("item-total")[0].innerText = itemTotalVal - (displayVal * removedQty);
   document.getElementsByClassName("disc-total")[0].innerText = discountTotal - ((displayVal - actualVal) * removedQty);
+  document.getElementsByClassName("gross-total")[0].innerText = orderTotalVal - (actualVal * removedQty);
   document.getElementById("cartTable").deleteRow(selectedRow.rowIndex);
 
   if(getItemContainer) {
