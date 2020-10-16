@@ -48,8 +48,6 @@ function addListener(data) {
 function addToCartListner(data) {
    data.map((cartBtn,index) => {
     let htmlTable = "";
-    
-    
 
     document.querySelector(`#btn-${index}`).addEventListener("click", function (e) {
 
@@ -65,7 +63,7 @@ function addToCartListner(data) {
 
       cartBtnProp(index, cartBtn.name); // Function for Cart Button properties change on click.
 
-      htmlTable =  `<tr data-display="${cartBtn.price.display}" data-actual="${cartBtn.price.actual}" > 
+      htmlTable =  `<tr data-display="${cartBtn.price.display}" data-actual="${cartBtn.price.actual}" data-index="${index}"> 
                       <td> 
                         <div class="item-list-details">
                           <div class="item--details">
@@ -111,25 +109,30 @@ function changeQuantity(tr, type) {
   const selectedRow = tr.parentElement.parentElement;
   const displayVal = parseInt(selectedRow.getAttribute("data-display"));
   const actualVal = parseInt(selectedRow.getAttribute("data-actual"));
+  const indexVal = parseInt(selectedRow.rowIndex) - 1;
+  console.log(selectedRow.parentElement.rowIndex,selectedRow.rowIndex)
   const quantity = parseInt(document.getElementsByClassName("totalCount")[0].value);
   const orderTotalVal = parseInt(document.getElementsByClassName("gross-total")[0].innerText);
   const itemTotalVal = parseInt(document.getElementsByClassName("item-total")[0].innerText);
   const discountTotal = parseInt(document.getElementsByClassName("disc-total")[0].innerText);
+  const updatedQuantity = type === "add" ? (quantity + 1) : (quantity - 1);
 
   document.getElementsByClassName("gross-total")[0].innerText = type === "add" ? (orderTotalVal + actualVal): (orderTotalVal - actualVal);
   document.getElementsByClassName("item-total")[0].innerText = type === "add" ? (itemTotalVal + displayVal): (itemTotalVal - displayVal);
   document.getElementsByClassName("disc-total")[0].innerText = type === "add" ? (discountTotal + (displayVal - actualVal)) : (discountTotal - (displayVal - actualVal));
-  document.getElementsByClassName("totalCount")[0].value =  type === "add" ? (quantity + 1) : (quantity - 1);
+  document.getElementsByClassName("totalCount")[indexVal].value =  updatedQuantity;
   
-  if(quantity === 1) {
-    document.getElementsByClassName("sub-quant")[0].removeAttribute('disabled');
+
+  // console.log(updatedQuantity)
+  console.log(document.getElementsByClassName("sub-quant"))
+  if(updatedQuantity == 1) {
+    document.getElementsByClassName("sub-quant")[indexVal].removeAttribute('disabled');
   }else {
-    document.getElementsByClassName("sub-quant")[0].setAttribute('disabled','true');
+    document.getElementsByClassName("sub-quant")[indexVal].setAttribute('disabled',true);
   }
 }
 
 function removeItem(tr) {
-  console.log(tr)
   let selectedRow = tr.parentElement.parentElement.parentElement;
   let displayVal = selectedRow.getAttribute("data-display");
   let actualVal = selectedRow.getAttribute("data-actual");
