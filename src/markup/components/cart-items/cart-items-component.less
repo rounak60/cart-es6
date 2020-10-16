@@ -16,6 +16,52 @@
                     }
                 }
             }
+            tbody.added-items-list {
+                tr {
+                    td {
+                        .item-list-details {
+                            display: flex;
+                            justify-content: space-between;
+                            border: 1px solid;
+                            padding: 0 10px;
+                            align-items: center;
+                            .item--details {
+                                display: flex;
+                                align-items: center;
+                                .item-list-image {
+                                    margin-right: 10px;
+                                }
+                                .item-list-name {
+                                    max-width: 110px;
+                                }
+                            }
+                            .item-list-remove {
+                                cursor: pointer;
+                            }
+                        }
+                        input[type=button] {
+                            height: 27px;
+                            width: 27px;
+                            background: none;
+                            border: none;
+                            text-align: center;
+                            outline: none;
+                        }
+                        input[type=text] {
+                            height: 30px;
+                            width: 30px;
+                            text-align: center;
+                            outline: none;
+                        }
+                    }
+                    .list-item-qty {
+                        text-align: center;
+                    }
+                    .list-item-price {
+                        text-align: right;
+                    }
+                }
+            }
         }
     }
 }

@@ -16,6 +16,13 @@
                     .item-total, .disc-total, .type-disc-total, .gross-total {
                         text-align: right;
                     }
+                    .item-total::before, .disc-total::before, .type-disc-total::before, .gross-total::before {
+                        content: "\0024";
+                    }
+                    .disc-total::before, .type-disc-total::before {
+                        content: "\2212""\0024";
+                    }
+
                 }
             }
         }
